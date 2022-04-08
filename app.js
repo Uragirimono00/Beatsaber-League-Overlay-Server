@@ -1,5 +1,14 @@
 // ********* app.js 파일 
-const wsModule = require('ws');
+const ws = require('ws');
+const https = require('http');
+const fs = require('fs');
+
+// 그루미님 서버용
+// const options = {
+//   ca: fs.readFileSync('/mnt/disk/cert.pem'),
+//   key: fs.readFileSync('/mnt/disk/privkey.pem'),
+//   cert: fs.readFileSync('/mnt/disk/fullchain.pem')
+// };
 
 // HTTP 서버(express) 생성 및 구동 
 // 1. express 객체 생성 
@@ -13,18 +22,42 @@ app.use("/", (req, res) => {
 
 
 // 3. 30001 port에서 서버 구동 
-const HTTPServer = app.listen(30001, () => {
+/*const HTTPServer = app.listen(30001, () => {
     console.log("Server is open at port:30001");
+});*/
+
+// 그루미님 서버용
+// let server = https.createServer(options, (req, res) => {
+//   res.writeHead(200);
+//   res.end(index);
+// });
+
+let server = https.createServer((req, res) => {
+  res.writeHead(200);
+  //res.end(index);
 });
+
+
+//server.addListener('upgrade', (req, res, head) => console.log('UPGRADE:', req.url));
+server.on('error', (err) => console.error(err));
+app.listen(30001, () => console.log('Https running on port 30001'));
+
+/*const HTTPSServer = https.createServer(options, app).listen(30001, () => { console.log("Server is open at port:30001"); });
 
 // 2. WebSocket 서버 생성/구동 
 const webSocketServer = new wsModule.Server({
-    server: HTTPServer, // WebSocket서버에 연결할 HTTP서버를 지정한다.
-});
+    server: HTTPSServer, // WebSocket서버에 연결할 HTTP서버를 지정한다.
+});*/
+let redteamInfo=[];
+let blueteamInfo=[];
 let redScore = 0;
 let bluescore = 0;
+let redAcc = 0;
+let blueAcc = 0;
 
-webSocketServer.on('connection', (ws, request) => {
+const wss = new ws.Server({server});
+
+wss.on('connection', (ws, request) => {
     // 1) 연결 클라이언트 IP 취득 
     const ip = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
     console.log(`새로운 클라이언트[${ip}] 접속`);
@@ -37,14 +70,37 @@ webSocketServer.on('connection', (ws, request) => {
 
         // 데이터 전송 } // 3) 클라이언트로부터 메시지 수신 이벤트 처리 
         ws.on('message', (msg) => {
-            console.msg(msg)
+            //console.log(msg)
             //console.log(`클라이언트[${ip}]에게 수신한 메시지 : ${msg}`);
             let jsonString = (JSON.parse(msg));
-            console.log(jsonString.team);
-            console.log(jsonString.name);
+
             if (jsonString.team === "redteam") {
-                bluescore = Number(bluescore) + Number(jsonString.count);
-                console.log(bluescore);
+                if (redteamInfo.findIndex(redteamInfo => redteamInfo.name === jsonString.name) != -1) {
+                    redteamInfo = Object.assign(redteamInfo, jsonString);
+                }else {
+                    redteamInfo.push(jsonString);
+                }
+                redAcc = 0;
+                redteamInfo.forEach(i => {
+                    redScore = Number(redScore) + Number(i.score);
+                    redAcc = ( Number(redAcc) + Number(i.percentage) ) / redteamInfo.length;
+                });
+                console.log(redScore);
+                console.log(redAcc);
+            }
+            else if (jsonString.team === "blueteam") {
+                if (blueteamInfo.findIndex(blueteamInfo => blueteamInfo.name === jsonString.name) != -1) {
+                    blueteamInfo = Object.assign(blueteamInfo, jsonString);
+                }else {
+                    blueteamInfo.push(jsonString);
+                }
+                blueAcc = 0;
+                blueteamInfo.forEach(i => {
+                    blueScore = Number(blueScore) + Number(i.score);
+                    blueAcc = ( Number(blueAcc) + Number(i.percentage) ) / blueteamInfo.length;
+                });
+                console.log(blueScore);
+                console.log(blueAcc);
             }
 
         });
