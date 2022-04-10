@@ -14,10 +14,27 @@ const fs = require('fs');
 // 1. express 객체 생성 
 const express = require('express');
 const app = express();
+
+let data ={};
+let redteamInfo=[];
+let blueteamInfo=[];
+let redScore = 0;
+let blueScore = 0;
+let redAcc = 0;
+let blueAcc = 0;
+
+app.set('views', './views');
+app.set('view engine', 'ejs');
 app.use(express.json());
+app.use(express.static(__dirname + '/public'));
 // 2. "/" 경로 라우팅 처리 
-app.use("/", (req, res) => {
-    res.sendFile(__dirname + '/index.html'); // index.html 파일 응답 
+app.get("/", (req, res) => {
+    res.render('index', {
+        "redScore" : redScore,
+        "redAcc" : redAcc,
+        "blueScore" : blueScore,
+        "blueAcc" : blueAcc
+    }); // index.html 파일 응답 
 });
 
 
@@ -33,14 +50,14 @@ app.use("/", (req, res) => {
 // });
 
 let server = https.createServer((req, res) => {
-  res.writeHead(200);
-  //res.end(index);
+    res.writeHead(200);
+    //res.end(index);
 });
 
 
 //server.addListener('upgrade', (req, res, head) => console.log('UPGRADE:', req.url));
 server.on('error', (err) => console.error(err));
-app.listen(30001, () => console.log('Https running on port 30001'));
+app.listen(30001, () => console.log('Http running on port 30001'));
 
 /*const HTTPSServer = https.createServer(options, app).listen(30001, () => { console.log("Server is open at port:30001"); });
 
@@ -48,12 +65,7 @@ app.listen(30001, () => console.log('Https running on port 30001'));
 const webSocketServer = new wsModule.Server({
     server: HTTPSServer, // WebSocket서버에 연결할 HTTP서버를 지정한다.
 });*/
-let redteamInfo=[];
-let blueteamInfo=[];
-let redScore = 0;
-let bluescore = 0;
-let redAcc = 0;
-let blueAcc = 0;
+
 
 const wss = new ws.Server({server});
 
@@ -85,6 +97,12 @@ wss.on('connection', (ws, request) => {
                     redScore = Number(redScore) + Number(i.score);
                     redAcc = ( Number(redAcc) + Number(i.percentage) ) / redteamInfo.length;
                 });
+                data = {
+                    "redScore" : redScore,
+                    "redAcc" : redAcc,
+                    "blueScore" : blueScore,
+                    "blueAcc" : blueAcc
+                };
                 console.log(redScore);
                 console.log(redAcc);
             }
@@ -99,6 +117,12 @@ wss.on('connection', (ws, request) => {
                     blueScore = Number(blueScore) + Number(i.score);
                     blueAcc = ( Number(blueAcc) + Number(i.percentage) ) / blueteamInfo.length;
                 });
+                data = {
+                    "redScore" : redScore,
+                    "redAcc" : redAcc,
+                    "blueScore" : blueScore,
+                    "blueAcc" : blueAcc
+                };
                 console.log(blueScore);
                 console.log(blueAcc);
             }
@@ -115,4 +139,5 @@ wss.on('connection', (ws, request) => {
             console.log(`클라이언트[${ip}] 웹소켓 연결 종료`);
         });
     }
+      
 });

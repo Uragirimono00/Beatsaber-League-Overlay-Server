@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Beatsabr-League-Overlay</title>
+</head>
+
+<body>
+    <div id="overlay">
+        <header>
+            <div class="Team-header red">
+                <div><span class="title"> TEAM RED</span> <span class="Score">□□□□□□□</span></div>
+                <div><span class="teamName">배신자팀1</span></div>
+            </div>
+            <div class="Team-header title">캬루배 자낳대 시즌1</div>
+            <div class="Team-header blue">
+                <div><span class="Score">□□□□□□□</span> <span class="title">TEAM BLUE</span></div>
+                <div><span class="teamName">배신자팀2</span></div>
+            </div>
+        </header>
+        <footer>
+            <div class="redTeam-group">
+                <div class="redscoreBar"></div>
+                <div class="score">
+                    <div class="redAcc"><%=redAcc%></div>
+                    <div class="redScore"><%=redScore%></div>
+                </div>
+            </div>
+            <div class="blueTeam-group">
+                <div class="bluescoreBar"></div>
+                <div class="score">
+                    <div class="blueAcc"><%=blueAcc%></div>
+                    <div class="blueScore"><%=blueScore%></div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+        function ScoreChanged() { 
+            let redAcc = document.getElementsByClassName('redAcc')[0]; 
+            let blueAcc = document.getElementsByClassName('blueAcc')[0]; 
+            if (redAcc.innerHTML > blueAcc.innerHTML){ 
+                redAcc.style.fontSize="2em";
+                redAcc.style.opacity="1";
+                blueAcc.style.fontSize="1.5em";
+                blueAcc.style.opacity=".8";
+            } else if (redAcc.innerHTML < blueAcc.innerHTML){ 
+                redAcc.style.opacity=".8";
+                redAcc.style.fontSize="1.5em";
+                blueAcc.style.fontSize="2em";
+                blueAcc.style.opacity="1";
+            } 
+        } 
+        ScoreChanged();
+        var ip = "localhost";
+        var port = 30001;
+
+        var socket = new WebSocket(`ws://${ip}:${port}`);
+
+        socket.addEventListener("open", () => {
+            console.log("WebSocket opened");
+        });
+
+    </script>
+</body>
+
+</html>
