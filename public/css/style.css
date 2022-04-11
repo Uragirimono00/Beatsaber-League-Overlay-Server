@@ -1,87 +1,107 @@
 @import url(./font.css);
-*, body{
+*,
+body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'yg-jalnan'; 
+    font-family: 'yg-jalnan';
 }
-#overlay{
+
+#overlay {
     position: relative;
     display: flex;
     width: 1280px;
     color: white;
     height: 720px;
-
 }
-header{
+
+header {
     padding: 10px;
     position: absolute;
     top: 0;
     display: flex;
     width: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     line-height: 32px;
 }
-.Team-header{
+
+.Team-header {
     width: 33%;
 }
-.Team-header.title{
+
+.Team-header.title {
     text-align: center;
     font-size: 1.5em;
 }
-.Team-header.red{
+
+.Team-header.red {
     text-align: left;
     line-height: 45px;
 }
-.Team-header.blue{
+
+.Team-header.blue {
     text-align: right;
     line-height: 45px;
 }
-.Team-header.red .title{
+
+.Team-header.red .title {
     border-radius: 5px;
     padding: 10px;
     background-color: darkred;
 }
-.Team-header.blue .title{
+
+.Team-header.blue .title {
     border-radius: 5px;
     padding: 10px;
     background-color: darkblue;
 }
-.teamName{
+
+.teamName {
     background: white;
     color: black;
     border-radius: 5px;
     padding: 10px;
     margin-top: 10px;
 }
-footer{
+
+.Score {
+    font-size: 1.4em;
+}
+
+footer {
     bottom: 0;
     position: absolute;
     display: flex;
     width: 100%;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
 }
-.redTeam-group{
+
+.redTeam-group {
     width: 50%;
     text-align: right;
     padding-right: 10px;
 }
-.blueTeam-group{
+
+.blueTeam-group {
     width: 50%;
     text-align: left;
     padding-left: 10px;
 }
-.blueTeam-group .blueAcc{
+
+.blueTeam-group .blueAcc {
     font-size: 1.5em;
 }
-.redTeam-group .redAcc{
+
+.redTeam-group .redAcc {
     font-size: 1.5em;
 }
-.blueTeam-group .blueScore{
+
+.blueTeam-group .blueScore {
     font-size: 1em;
     opacity: .5;
 }
-.redTeam-group .redScore{
+
+.redTeam-group .redScore {
     font-size: 1em;
     opacity: .5;
 }

@@ -15,9 +15,10 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 
-let data ={};
-let redteamInfo=[];
-let blueteamInfo=[];
+let jsonData;
+let data = {};
+let redteamInfo = [];
+let blueteamInfo = [];
 let redScore = 0;
 let blueScore = 0;
 let redAcc = 0;
@@ -30,10 +31,10 @@ app.use(express.static(__dirname + '/public'));
 // 2. "/" 경로 라우팅 처리 
 app.get("/", (req, res) => {
     res.render('index', {
-        "redScore" : redScore,
-        "redAcc" : redAcc,
-        "blueScore" : blueScore,
-        "blueAcc" : blueAcc
+        "redScore": redScore,
+        "redAcc": redAcc,
+        "blueScore": blueScore,
+        "blueAcc": blueAcc
     }); // index.html 파일 응답 
 });
 
@@ -67,7 +68,7 @@ const webSocketServer = new wsModule.Server({
 });*/
 
 
-const wss = new ws.Server({server});
+const wss = new ws.Server({ server });
 
 wss.on('connection', (ws, request) => {
     // 1) 연결 클라이언트 IP 취득 
@@ -89,42 +90,41 @@ wss.on('connection', (ws, request) => {
             if (jsonString.team === "redteam") {
                 if (redteamInfo.findIndex(redteamInfo => redteamInfo.name === jsonString.name) != -1) {
                     redteamInfo = Object.assign(redteamInfo, jsonString);
-                }else {
+                } else {
                     redteamInfo.push(jsonString);
                 }
                 redAcc = 0;
                 redteamInfo.forEach(i => {
                     redScore = Number(redScore) + Number(i.score);
-                    redAcc = ( Number(redAcc) + Number(i.percentage) ) / redteamInfo.length;
+                    redAcc = (Number(redAcc) + Number(i.percentage)) / redteamInfo.length;
                 });
                 data = {
-                    "redScore" : redScore,
-                    "redAcc" : redAcc,
-                    "blueScore" : blueScore,
-                    "blueAcc" : blueAcc
+                    "redScore": redScore,
+                    "redAcc": redAcc,
+                    "blueScore": blueScore,
+                    "blueAcc": blueAcc
                 };
-                console.log(redScore);
-                console.log(redAcc);
-            }
-            else if (jsonString.team === "blueteam") {
+                jsonData = JSON.stringify(data);
+                ws.send(jsonData);
+            } else if (jsonString.team === "blueteam") {
                 if (blueteamInfo.findIndex(blueteamInfo => blueteamInfo.name === jsonString.name) != -1) {
                     blueteamInfo = Object.assign(blueteamInfo, jsonString);
-                }else {
+                } else {
                     blueteamInfo.push(jsonString);
                 }
                 blueAcc = 0;
                 blueteamInfo.forEach(i => {
                     blueScore = Number(blueScore) + Number(i.score);
-                    blueAcc = ( Number(blueAcc) + Number(i.percentage) ) / blueteamInfo.length;
+                    blueAcc = (Number(blueAcc) + Number(i.percentage)) / blueteamInfo.length;
                 });
                 data = {
-                    "redScore" : redScore,
-                    "redAcc" : redAcc,
-                    "blueScore" : blueScore,
-                    "blueAcc" : blueAcc
+                    "redScore": redScore,
+                    "redAcc": redAcc,
+                    "blueScore": blueScore,
+                    "blueAcc": blueAcc
                 };
-                console.log(blueScore);
-                console.log(blueAcc);
+                jsonData = JSON.stringify(data);
+                ws.send(jsonData);
             }
 
         });
@@ -139,5 +139,5 @@ wss.on('connection', (ws, request) => {
             console.log(`클라이언트[${ip}] 웹소켓 연결 종료`);
         });
     }
-      
+
 });
