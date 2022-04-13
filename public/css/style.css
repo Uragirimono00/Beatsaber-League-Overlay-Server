@@ -21,7 +21,7 @@ header {
     top: 0;
     display: flex;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
     line-height: 32px;
 }
 
@@ -56,6 +56,10 @@ header {
     background-color: darkblue;
 }
 
+.teamScore {
+    font-size: 1.2em;
+}
+
 .teamName {
     background: white;
     color: black;
@@ -69,11 +73,14 @@ header {
 }
 
 footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: stretch;
+    padding: 10px 0 0 0;
     bottom: 0;
     position: absolute;
-    display: flex;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .redTeam-group {
@@ -104,4 +111,35 @@ footer {
 .redTeam-group .redScore {
     font-size: 1em;
     opacity: .5;
+}
+
+.songInfo {
+    background: rgba(0, 0, 0, .7);
+    width: 100%;
+    display: flex;
+    padding: 20px 0 10px 0;
+    margin-top: 10px;
+}
+
+.songInfo .songPicture {
+    width: 50%;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.songInfo .info {
+    width: 50%;
+    text-align: left;
+    padding-left: 10px;
+    font-size: .8em;
+    line-height: 22px;
+}
+
+.songInfo .songPicture img {
+    border-radius: 10px;
+    width: 110px;
+}
+
+li {
+    list-style: none;
 }
