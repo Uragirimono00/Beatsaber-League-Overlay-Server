@@ -29,11 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.onmessage = function(event) {
         console.log(`서버 웹소켓에게 받은 데이터: ${event.data}`);
         const obj = JSON.parse(event.data);
-        document.getElementsByClassName("redAcc")[0].innerHTML = obj.redAcc;
-        document.getElementsByClassName("redScore")[0].innerHTML = obj.redScore;
-        document.getElementsByClassName("blueAcc")[0].innerHTML = obj.blueAcc;
-        document.getElementsByClassName("blueScore")[0].innerHTML = obj.blueScore;
-        ScoreChanged();
+        if (obj.redTeam) {
+            document.getElementsByClassName("redAcc")[0].innerHTML = obj.redAcc;
+            document.getElementsByClassName("redScore")[0].innerHTML = obj.redScore;
+            ScoreChanged();
+        }
+        if (obj.blueTeam) {
+            document.getElementsByClassName("blueAcc")[0].innerHTML = obj.blueAcc;
+            document.getElementsByClassName("blueScore")[0].innerHTML = obj.blueScore;
+            ScoreChanged();
+        }
         if (obj.songName) {
             document.getElementById("Title").innerHTML = obj.songSubname != null ? `${obj.songName} - ${obj.songSubname}` : `${obj.songName}`;
             document.getElementById("Author").innerHTML = obj.songAuthorName != null ? `${obj.songAuthorName} - ${obj.levelAuthorName}` : `${obj.levelAuthorName}`;

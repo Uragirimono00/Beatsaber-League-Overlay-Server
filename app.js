@@ -100,6 +100,7 @@ wss.on('connection', (ws, request) => {
                     redAcc = (Number(redAcc) + Number(i.percentage)) / redteamInfo.length;
                 });
                 data = {
+                    "redTeam": true,
                     "redScore": redScore,
                     "redAcc": redAcc,
                     "blueScore": blueScore,
@@ -119,6 +120,7 @@ wss.on('connection', (ws, request) => {
                     blueAcc = (Number(blueAcc) + Number(i.percentage)) / blueteamInfo.length;
                 });
                 data = {
+                    "blueTeam": true,
                     "redScore": redScore,
                     "redAcc": redAcc,
                     "blueScore": blueScore,
