@@ -34,6 +34,14 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementsByClassName("blueAcc")[0].innerHTML = obj.blueAcc;
         document.getElementsByClassName("blueScore")[0].innerHTML = obj.blueScore;
         ScoreChanged();
+        if (obj.songName) {
+            document.getElementById("Title").innerHTML = obj.songSubname != null ? `${obj.songName} - ${obj.songSubname}` : `${obj.songName}`;
+            document.getElementById("Author").innerHTML = obj.songAuthorName != null ? `${obj.songAuthorName} - ${obj.levelAuthorName}` : `${obj.levelAuthorName}`;
+            document.getElementById("Bpm").innerHTML = `BPM : ${obj.songBPM}`;
+            document.getElementById("Njs").innerHTML = `NJS : ${obj.noteJumpSpeed}`;
+            var cover = document.getElementById("image");
+            cover.setAttribute("src", `data:image/png;base64,${data.songCover}`);
+        }
     }
 
     const setScore = urlParams.get('setscore');

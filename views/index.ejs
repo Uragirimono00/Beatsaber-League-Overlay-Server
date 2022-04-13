@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
     <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/index.js"></script>
+    <!-- <script src="/js/index.js"></script> -->
     <title>Beatsabr-League-Overlay</title>
 </head>
 
@@ -49,19 +49,89 @@
             </div>
             <div class="songInfo">
                 <div class="songPicture">
-                    <img src="https://as.cdn.beatsaver.com/8da5c5cf30d00ab10816a4612e80b1815423c3db.jpg" data="image/png;base64" alt="test">
+                    <img id="image" src="https://as.cdn.beatsaver.com/8da5c5cf30d00ab10816a4612e80b1815423c3db.jpg" data="image/png;base64" alt="test">
                 </div>
                 <div class="info">
                     <ul>
-                        <li>제목 - 소제목</li>
-                        <li>작곡가 [맵퍼]</li>
-                        <li>NJS - 22</li>
-                        <li>BPM - 222</li>
+                        <li id="Title">제목 - 소제목</li>
+                        <li id="Author">작곡가 [맵퍼]</li>
+                        <li id="Njs">NJS - 22</li>
+                        <li id="Bpm">BPM - 222</li>
                     </ul>
                 </div>
             </div>
         </footer>
     </div>
+    <!-- 테스트용 코드 -->
+    <!-- 
+    <button id="btn_send">점수 전송</button>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        // 1. 웹소켓 클라이언트 객체 생성 
+        const webSocket2 = new WebSocket("ws://localhost:30001");
+        // 2. 웹소켓 이벤트 처리 // 2-1) 연결 이벤트 처리 
+        webSocket2.onopen = () => {
+            console.log("웹소켓서버와 연결 성공");
+        };
+        // 2-2) 메세지 수신 이벤트 처리 
+        webSocket2.onmessage = function(event) {
+                console.log(`서버 웹소켓에게 받은 데이터: ${event.data}`);
+                const obj = JSON.parse(event.data);
+                document.getElementsByClassName("redAcc")[0].innerHTML = obj.redAcc;
+                document.getElementsByClassName("redScore")[0].innerHTML = obj.redScore;
+                document.getElementsByClassName("blueAcc")[0].innerHTML = obj.blueAcc;
+                document.getElementsByClassName("blueScore")[0].innerHTML = obj.blueScore;
+                // ScoreChanged();
+                if (obj.songName) {
+                    document.getElementById("Title").innerHTML = obj.songSubname != null ? `${obj.songName} - ${obj.songSubname}` : `${obj.songName}`;
+                    document.getElementById("Author").innerHTML = obj.songAuthorName != null ? `${obj.songAuthorName} - ${obj.levelAuthorName}` : `${obj.levelAuthorName}`;
+                    document.getElementById("Bpm").innerHTML = `BPM : ${obj.songBPM}`;
+                    document.getElementById("Njs").innerHTML = `NJS : ${obj.noteJumpSpeed}`;
+                    var cover = document.getElementById("image");
+                    cover.setAttribute("src", `data:image/png;base64,${data.songCover}`);
+                }
+            }
+            // 2-3) 연결 종료 이벤트 처리 
+        webSocket2.onclose = function() {
+                console.log("서버 웹소켓 연결 종료");
+            }
+            // 2-4) 에러 발생 이벤트 처리 
+        webSocket2.onerror = function(event) {
+                console.log(event)
+            }
+            // 3. 버튼 클릭 이벤트 처리 
+            // 3-1) 웹소켓 서버에게 점수 보내기
+        let beatsaberImpormation = {
+            "count": 1,
+            "team": "blue"
+        };
+        beatsaberImpormation.count = Math.floor(Math.random() * (500 - 100)) + 100;
+        beatsaberImpormation.team = urlParams.get('team');
+        beatsaberImpormation.name = urlParams.get('name');
+        let jsonStr = {
+            "songInfo": true,
+            "difficulty": "1234",
+            "image": "https://as.cdn.beatsaver.com/8da5c5cf30d00ab10816a4612e80b1815423c3db.jpg",
+            "songName": "Magical girl*conflict",
+            "songSubName": "",
+            "songAuthorName": "mo?lu",
+            "levelAuthorName": "Uragirimono",
+            "songBPM": "276",
+            "noteJumpSpeed": "22",
+        };
+        document.getElementById("btn_send").onclick = function() {
+            if (webSocket2.readyState === webSocket2.OPEN) {
+                // 연결 상태 확인 
+                const jsonSend = JSON.stringify(jsonStr);
+                webSocket2.send(jsonSend);
+                // 웹소켓 서버에게 점수 전송 
+                // 보낼때마다 숫자를 1씩 증가 
+            } else {
+                alert("연결된 웹소켓 서버가 없습니다.");
+            }
+        }
+    </script>
+     -->
 </body>
 
 </html>
